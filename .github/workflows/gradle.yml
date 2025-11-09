@@ -1,4 +1,4 @@
-name: Spring Boot Gradle Build
+name: Spring Boot Gradle Build and Docker Push
 
 on:
   push:
@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout
       - name: Checkout source
         uses: actions/checkout@v4
 
-      # Step 2: Setup Java
+      # Step 2: Setup Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -23,17 +23,26 @@ jobs:
           java-version: "17"
           cache: gradle
 
-      # Step 3: Gradlew permission fix
+      # Step 3: Make gradlew executable
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      # Step 4: Build with Gradle
+      # Step 4: Build the project
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
 
-      # Step 5: Upload JAR (optional but useful)
+      # Step 5: Upload JAR (optional)
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: springboot-jar
           path: build/libs/*.jar
+      - name: Build & push Docker image
+        uses : mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: rsureshgudibanda/cicddemo
+          tags: v1, latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}

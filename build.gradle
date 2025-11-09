@@ -7,6 +7,12 @@ plugins {
 group = 'com.example'
 version = '0.0.1'
 
+bootJar {
+    archiveBaseName.set("DemoPurpose_CICD")
+    archiveVersion.set("1.0.0")
+    archiveFileName.set("DemoPurpose_CICD.1.0.0.jar")
+}
+
 java {
 	sourceCompatibility = '11'
 }
