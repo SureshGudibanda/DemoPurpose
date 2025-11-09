@@ -14,6 +14,7 @@ public class DemoController {
 		System.out.println("constructor");
 	}
 
+	// this is for cicd testing purpose
 	@GetMapping("/demo")
 	public String demo() {
 
